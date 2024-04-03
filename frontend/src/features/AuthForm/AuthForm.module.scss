@@ -1,0 +1,259 @@
+@import "src/shared/static/scss/helpers/index";
+.wrapper {
+  padding: 80px 0 120px;
+  @include breakpoint(sm) {
+    padding: 124px 0 120px;
+  }
+  @include breakpoint(md) {
+    padding: 84px 0 120px;
+  }
+
+  &_big {
+    @include breakpoint(sm) {
+      padding: 77px 0;
+    }
+    @include breakpoint(md) {
+      padding: 80px 0;
+    }
+  }
+}
+.inner {
+  position: relative;
+  max-width: 508px;
+  margin: 0 auto;
+  padding: 32px 17px;
+  background-color: $white;
+  border-radius: 35px;
+  @include breakpoint(sm) {
+    padding: 32px 24px 48px 24px;
+  }
+  form {
+    max-width: 380px;
+    margin: 0 auto;
+  }
+  .wrapper_big & {
+    max-width: 826px;
+    @include breakpoint(sm) {
+      padding: 32px 30px 48px 30px;
+    }
+    @include breakpoint(md) {
+      padding: 32px 64px 48px 64px;
+    }
+    form {
+      max-width: 100%;
+    }
+  }
+  [class^="Input_input"] {
+    margin-bottom: 16px;
+    input {
+      padding: 20px 22px;
+    }
+  }
+  [class^="Input_error_row"] {
+    margin-bottom: 0;
+    font-size: 12px;
+    line-height: 14px;
+    position: absolute;
+    bottom: 4px;
+    padding-left: 22px;
+    user-select: none;
+  }
+  [class^="Checkbox_custom_checkbox"] {
+    margin-right: 9px;
+    vertical-align: middle;
+  }
+}
+.singUpWrapper {
+  padding-bottom: 60px;
+}
+.header {
+  display: flex;
+  width: 100%;
+  margin-bottom: 32px;
+  border-bottom: 1px solid rgba($text-default, 0.25);
+  @include breakpoint(sm) {
+    border-width: 2px;
+  }
+  a {
+    position: relative;
+    width: 50%;
+    font-size: 16px;
+    font-weight: 700;
+    font-style: normal;
+    line-height: 120%;
+    color: $black;
+    @include breakpoint(sm) {
+      font-size: 20px;
+    }
+
+    &:first-of-type {
+      padding-left: 10px;
+      @include breakpoint(sm) {
+        padding-left: 0;
+      }
+    }
+    &:last-of-type {
+      padding-right: 10px;
+      @include breakpoint(sm) {
+        padding-right: 0;
+      }
+    }
+  }
+}
+.toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 16px;
+  &:before {
+    content: "";
+    position: absolute;
+    right: 0;
+    bottom: -1px;
+    left: 0;
+    display: block;
+    height: 1px;
+    background-color: transparent;
+    @include breakpoint(sm) {
+      height: 2px;
+      bottom: -2px;
+    }
+  }
+}
+.active {
+  &:before {
+    background-color: $green;
+  }
+}
+.subtitle {
+  margin-bottom: 15px;
+  color: $green;
+}
+.title {
+  display: flex;
+  justify-content: center;
+  font-size: 16px;
+  font-weight: 700;
+  font-style: normal;
+  line-height: 120%;
+  color: $black;
+  margin-bottom: 24px;
+  text-align: center;
+  @include breakpoint(sm) {
+    font-size: 20px;
+  }
+}
+.backgroundImg {
+  position: absolute;
+  right: -24px;
+  bottom: 0;
+  left: -24px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  @include breakpoint(sm) {
+    left: -50px;
+    right: -50px;
+  }
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    max-width: inherit;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+}
+.backgroundImg_wrap {
+  flex-shrink: 0;
+  width: calc(100% + 280px);
+  @include breakpoint(sm) {
+    width: 1390px;
+  }
+  @include breakpoint(lg) {
+    width: 100%;
+    min-width: 1390px;
+  }
+  @include breakpoint(xl) {
+    width: 1920px;
+  }
+}
+.backgroundImg_img {
+  width: 100%;
+  height: 0;
+  position: relative;
+  flex-shrink: 0;
+  padding-top: calc(201 / 640 * 100%);
+}
+.form_bottom {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  width: 100%;
+  .wrapper_big & {
+    @include breakpoint(sm) {
+      margin-top: 16px;
+    }
+  }
+}
+.bottom_singleItem {
+  justify-content: center;
+}
+.btn {
+  width: fit-content;
+  button {
+    padding: 0 40px;
+  }
+}
+.btn_gos {
+  width: 100%;
+  margin-top: 24px;
+}
+.form_bottom_singUp {
+  flex-direction: column;
+  @include breakpoint(sm) {
+    flex-direction: row;
+  }
+
+  .btn_gos {
+    order: -1;
+    width: 100%;
+    margin-top: 12px;
+    @include breakpoint(sm) {
+      order: 0;
+      margin-top: 24px;
+    }
+  }
+  .link {
+    margin-top: 23px;
+    @include breakpoint(sm) {
+      margin-top: 0;
+    }
+  }
+  .btn {
+    order: -1;
+    width: 100%;
+    @include breakpoint(sm) {
+      order: 0;
+      margin-bottom: 0;
+      width: fit-content;
+    }
+    button {
+      width: 100%;
+    }
+  }
+}
+.link {
+  padding-top: 1px;
+  [class^="CustomLink_link"] svg {
+    margin: 0 8px 0 0;
+    path {
+      fill: currentColor;
+    }
+  }
+}

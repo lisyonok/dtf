@@ -1,0 +1,98 @@
+@import "src/shared/static/scss/helpers/index";
+.error_row {
+  display: flex;
+  align-items: center;
+  color: $red;
+  margin-top: 16px;
+
+  svg {
+    margin-right: 9px;
+  }
+}
+.form_content {
+  @include breakpoint(sm) {
+    display: flex;
+    width: 100%;
+  }
+}
+.form_row {
+  &:not(.form_row_notice) {
+    flex-grow: 1;
+  }
+  &.form_row_notice {
+    flex-shrink: 0;
+    padding-top: 16px;
+    @include breakpoint(sm) {
+      padding-top: 0;
+      width: 57%;
+      padding-left: 23px;
+    }
+    @include breakpoint(md) {
+      width: 54%;
+      padding-left: 39px;
+    }
+  }
+  .notice {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 17px;
+    color: $text-default;
+    &_row {
+      position: relative;
+      margin-bottom: 10px;
+      transition: padding 0.3s ease;
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+      &:before {
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      &_black {
+        color: #000;
+        line-height: 140%; /* 19.6px */
+        margin-bottom: 17px;
+      }
+    }
+    &_check {
+      padding-left: 16px;
+      &:before {
+        @include mask(
+          "data:image/svg+xml,%3Csvg width='9' height='6' viewBox='0 0 9 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 2.14286L3.91667 5L8 1' stroke='%234CC181' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A"
+        );
+
+        position: absolute;
+        top: 6px;
+        left: -1px;
+
+        display: block;
+
+        width: 9px;
+        height: 6px;
+
+        opacity: 1;
+        background-color: $green;
+      }
+    }
+    &_error {
+      padding-left: 16px;
+      &:before {
+        @include mask(
+          "data:image/svg+xml,%3Csvg width='9' height='9' viewBox='0 0 9 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L8 8M8 1L1 8' stroke='%23E30016' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A"
+        );
+
+        position: absolute;
+        top: 5px;
+        left: -1px;
+
+        display: block;
+
+        width: 9px;
+        height: 9px;
+
+        opacity: 1;
+        background-color: $red;
+      }
+    }
+  }
+}

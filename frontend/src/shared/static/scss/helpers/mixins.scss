@@ -1,0 +1,53 @@
+@mixin breakpoint($bp, $rule: min-width) {
+  @media screen and (#{$rule}: map-get($grid-breakpoints, $bp)) {
+    @content;
+  }
+}
+
+@mixin max-breakpoint($bp, $rule: max-width) {
+  @media screen and (#{$rule}: map-get($grid-breakpoints, $bp) - 1) {
+    @content;
+  }
+}
+
+@mixin min-max-breakpoint($min, $max) {
+  @media screen and (min-width: map-get($grid-breakpoints, $min)) and (max-width: map-get($grid-breakpoints, $max) - 1) {
+    @content;
+  }
+}
+
+@mixin hovering {
+  @media (hover), (min-width: 0\0), (min-device-pixel-ratio: 0) {
+    @content;
+  }
+}
+
+@mixin mask($url, $rule: contain) {
+  content: "";
+
+  flex-shrink: 0;
+
+  mask-image: url($url);
+  mask-position: center;
+  mask-repeat: no-repeat;
+  mask-size: $rule;
+}
+
+@mixin text400 {
+  font-size: 14px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 140%;
+  color: $text-default;
+
+  @include breakpoint(lg) {
+    font-size: 16px;
+  }
+}
+@mixin textCustom($fsz, $fw, $color, $lh: 140%) {
+  font-size: $fsz;
+  font-weight: $fw;
+  font-style: normal;
+  line-height: $lh;
+  color: $color;
+}

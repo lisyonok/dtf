@@ -1,0 +1,279 @@
+@import "../helpers/index";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html {
+  background-color: $mainBg2;
+}
+
+// Убираем внутренние отступы
+
+ul,
+ol {
+  padding: 0;
+  list-style: none;
+}
+
+// Убираем внешние отступы
+
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+li,
+figure,
+figcaption,
+blockquote,
+dl,
+dd {
+  margin: 0;
+}
+
+// Выставляем основные настройки по-умолчанию для body
+
+body {
+  scroll-behavior: smooth;
+  display: flex;
+  flex-direction: column;
+  min-width: 360px;
+  line-height: 120%;
+  text-rendering: optimizespeed;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: $blue4;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: $green;
+    border-radius: 10px;
+  }
+}
+
+// Упрощаем работу с изображениями
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+// Наследуем шрифты для инпутов и кнопок
+
+input,
+textarea,
+select {
+  font: inherit;
+  font-family: $fd;
+}
+
+// Удаляем все анимации и переходы для людей, которые предпочитай их не использовать
+
+@media (prefers-reduced-motion: reduce) {
+  button,
+  a {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
+
+a {
+  color: $blue;
+  text-decoration: none;
+
+  &:focus {
+    outline: none;
+  }
+
+  // Элементы a, у которых нет класса, сбрасываем до дефолтных стилей
+  &:not([class]) {
+    text-decoration-skip-ink: auto;
+    border-bottom: 1px solid transparent;
+    transition: all 0.3s ease;
+
+    @include hovering {
+      &:hover,
+      &:active {
+        border-bottom: 1px solid $blue;
+      }
+    }
+  }
+}
+
+input::-ms-clear {
+  display: none;
+}
+
+.hidden-block {
+  display: none !important;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+}
+
+button {
+  all: unset;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+  font-family: $fd;
+  background-color: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.disabled {
+  pointer-events: none;
+}
+
+:disabled {
+  cursor: default;
+}
+
+html,
+body {
+  height: 100%;
+  min-height: 100vh;
+  font-family: $fd;
+  font-size: 14px;
+  font-weight: 400;
+  font-style: normal;
+  line-height: 20px;
+  color: $text-default;
+  letter-spacing: 0em;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6 {
+  margin-bottom: 16px;
+  font-family: $fd;
+  font-weight: 700;
+  line-height: 120%;
+  color: $black;
+  text-align: left;
+}
+
+h1 {
+  @include breakpoint(sm) {
+    padding: 0 30px;
+  }
+}
+
+h1,
+.h1 {
+  font-size: 18px;
+
+  @include breakpoint(sm) {
+    font-size: 24px;
+  }
+
+  @include breakpoint(xl) {
+    font-size: 30px;
+  }
+}
+
+h2,
+.h2 {
+  font-size: 16px;
+
+  @include breakpoint(sm) {
+    font-size: 18px;
+  }
+
+  @include breakpoint(xl) {
+    font-size: 20px;
+  }
+}
+
+h3,
+.h3 {
+  font-size: 14px;
+
+  @include breakpoint(sm) {
+    font-size: 16px;
+  }
+
+  @include breakpoint(xl) {
+    font-size: 18px;
+  }
+}
+
+#root {
+  z-index: 1;
+  display: flex;
+  flex: 1 0 auto;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.container {
+  width: 90%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 0 14px;
+  background-color: $white;
+}
+
+.overflowed,
+.overflowed body {
+  overflow: hidden;
+  height: auto;
+
+  @include breakpoint(lg) {
+    overflow: inherit;
+    height: 100%;
+  }
+}
+
+.popup-opened {
+  #fixedMenu {
+    transform: translateY(100%);
+  }
+}
+
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus textarea:-webkit-autofill,
+textarea:-webkit-autofill:hover textarea:-webkit-autofill:focus,
+select:-webkit-autofill,
+select:-webkit-autofill:hover,
+select:-webkit-autofill:focus {
+  box-shadow: 0 0 0 1000px $white inset !important;
+}
+
+
+.modalOpen {
+  overflow: hidden;
+}
+
+.error {
+  color: $red;
+}

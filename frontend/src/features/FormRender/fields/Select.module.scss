@@ -1,0 +1,210 @@
+@import "shared/static/scss/helpers/index";
+
+.select {
+  &.bordered {
+    .inputField {
+      border: 1px solid rgba($text-default, 0.25);
+    }
+  }
+
+  &.active {
+    .inputField {
+      border-color: $link;
+      border-bottom: 0;
+      border-bottom-right-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    .inputIcon svg {
+      transform: rotate(180deg);
+    }
+  }
+
+  &.disable {
+    pointer-events: none;
+
+    .inputIcon svg path {
+      stroke: $text-default;
+    }
+  }
+}
+
+.input {
+  position: relative;
+
+  width: 100%;
+
+  font-size: 16px;
+  font-weight: 400;
+  line-height: 22px;
+
+  &Field {
+    cursor: pointer;
+    resize: none;
+
+    overflow: hidden;
+
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 62px;
+    padding: 19px 45px 19px 24px;
+
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    color: $black;
+    text-align: left;
+    text-overflow: ellipsis;
+    letter-spacing: 0em;
+
+    background-color: $white;
+    border: 1px solid $white;
+    border-radius: 32px;
+
+    @include hovering {
+      &:hover {
+        color: $black;
+        border-color: $link !important;
+        transition: border-color 0.2s ease;
+      }
+    }
+
+    &:disabled {
+      pointer-events: none;
+      background-color: rgba($text-default, 0.1);
+      border-color: rgba($text-default, 0.1);
+    }
+  }
+
+  &Label {
+    pointer-events: none;
+    user-select: none;
+
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform-origin: left;
+    transform: translateY(-50%);
+
+    display: flex;
+    align-items: center;
+
+    width: 100%;
+    padding: 0 24px;
+
+    font-size: inherit;
+    font-weight: inherit;
+    line-height: inherit;
+    color: $text-default;
+    white-space: nowrap;
+    vertical-align: middle;
+
+    background-color: transparent;
+    border-radius: 32px;
+
+    transition-timing-function: ease-in-out;
+    transition-duration: 0.3s;
+    transition-property: all;
+
+    div {
+      overflow: hidden;
+      max-width: 100%;
+      text-overflow: ellipsis;
+    }
+
+    span {
+      font-weight: 700;
+    }
+  }
+
+  &Icon {
+    pointer-events: none;
+
+    position: absolute;
+    top: 50%;
+    right: 24px;
+    transform: translateY(-50%);
+
+    svg {
+      transition: transform 0.2s ease-in;
+    }
+  }
+
+  textarea~&Label {
+    top: 31px;
+  }
+
+  .focus &Label,
+  &Field:focus~&Label,
+  .not_empty &Label {
+    transform: translateY(calc(-100% - 8px)) scale(.8);
+    left: 6px;
+    width: auto;
+    color: rgba($text-default, 0.5);
+  }
+
+  .invalid &Field {
+    color: $red;
+    border-color: $red;
+
+    &:focus {
+      color: $black;
+      border-color: $blue;
+    }
+  }
+
+  .invalid &Label {
+    color: $red;
+  }
+
+  .invalid.focus &Label,
+  .invalid.not_empty &Label{
+    color: rgba($red, 0.5);
+  }
+
+  .invalid &Field:focus~&Label {
+    color: rgba($text-default, 0.5);
+  }
+
+  .error {
+    position: absolute;
+    bottom: 2px;
+    left: 24px;
+    font-size: 12px;
+  }
+
+  .suggestions {
+    position: absolute;
+    z-index: 10;
+
+    width: 100%;
+    padding: 0px 41px 23px 24px;
+
+    background: white;
+    border: 1px solid $link;
+    border-top: 0;
+    border-bottom-right-radius: 30px;
+    border-bottom-left-radius: 30px;
+  }
+
+  .simplebar{
+    max-height: 200px;
+  }
+  
+  .option {
+    &.active {
+      color: $black;
+    }
+
+    &:not(:last-child) {
+      margin-bottom: 10px;
+    }
+
+    @include hovering {
+      &:hover {
+        cursor: pointer;
+        color: $link;
+      }
+    }
+  }
+}

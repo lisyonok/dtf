@@ -1,0 +1,33 @@
+{
+  "extends": ["stylelint-config-recommended-scss", "stylelint-config-prettier"],
+  "plugins": ["stylelint-order"],
+  "rules": {
+    "no-empty-source": true,
+    "no-duplicate-at-import-rules": true,
+    "no-duplicate-selectors": true,
+    "block-no-empty": [
+      true,
+      {
+        "ignore": ["comments"]
+      }
+    ],
+    "media-feature-name-no-unknown": [true, { "ignoreMediaFeatureNames": ["min-device-pixel-ratio"] }],
+    "comment-no-empty": true,
+    "color-no-invalid-hex": true,
+    "scss/dollar-variable-pattern": ".*",
+    "max-nesting-depth": 7,
+    "selector-max-compound-selectors": 5,
+    "no-descending-specificity": null,
+    "selector-class-pattern": ".*",
+    "selector-no-qualifying-type": [
+      true,
+      {
+        "ignore": ["attribute", "class"]
+      }
+    ],
+    "function-url-quotes": "always",
+    "selector-attribute-quotes": "always",
+    "selector-max-id": 10,
+    "scss/at-mixin-pattern": null
+  }
+}

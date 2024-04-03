@@ -1,0 +1,100 @@
+@import "src/shared/static/scss/helpers/index";
+.modal {
+  position: fixed;
+  z-index: 1000;
+  top: 0;
+  left: 0;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 360px;
+  height: 100%;
+  min-height: 100vh;
+  padding: 0 24px;
+  visibility: visible;
+  opacity: 1;
+  transition: opacity 0.3s ease;
+  &:before {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    display: block;
+    width: 100%;
+    min-width: 100vw;
+    height: 100%;
+    min-height: 100vh;
+    background-color: rgba($blue3, 0.25);
+  }
+
+  &_title {
+    @include textCustom(22px, 700, $black);
+    padding-right: 10px;
+    margin-bottom: 16px;
+  }
+
+  &_text {
+    @include text400;
+
+    margin-bottom: 16px;
+  }
+
+  &_btns {
+    button {
+      width: 100%;
+      max-width: 360px;
+      &:first-child {
+        margin-bottom: 16px;
+      }
+    }
+  }
+}
+.inner {
+  position: relative;
+  transform: translateY(0);
+  width: 100%;
+  max-width: 373px;
+  margin: 24px auto;
+  opacity: 1;
+  background-color: $white;
+  border-radius: 24px;
+  transition: all 0.3s ease;
+  @include breakpoint(sm) {
+    border-radius: 35px;
+  }
+}
+.close {
+  position: absolute;
+  z-index: 2;
+  top: 24px;
+  right: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  color: $blue3;
+  background-color: transparent;
+  border: 0;
+  border-radius: 50%;
+  @include breakpoint(sm) {
+    right: 22px;
+  }
+  &:before {
+    @include mask(
+      "data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cg clip-path='url(%23clip0_1950_14019)'%3E%3Cpath d='M12 6.00011C11.8593 5.8595 11.6686 5.78052 11.4697 5.78052C11.2708 5.78052 11.0801 5.8595 10.9395 6.00011L8.99996 7.93961L7.06046 6.00011C6.91901 5.86349 6.72956 5.78789 6.53291 5.7896C6.33626 5.79131 6.14815 5.87019 6.0091 6.00924C5.87004 6.1483 5.79117 6.33641 5.78946 6.53306C5.78775 6.7297 5.86334 6.91916 5.99996 7.06061L7.93946 9.00011L5.99996 10.9396C5.86334 11.0811 5.78775 11.2705 5.78946 11.4672C5.79117 11.6638 5.87004 11.8519 6.0091 11.991C6.14815 12.13 6.33626 12.2089 6.53291 12.2106C6.72956 12.2123 6.91901 12.1367 7.06046 12.0001L8.99996 10.0606L10.9395 12.0001C11.0809 12.1367 11.2704 12.2123 11.467 12.2106C11.6637 12.2089 11.8518 12.13 11.9908 11.991C12.1299 11.8519 12.2087 11.6638 12.2105 11.4672C12.2122 11.2705 12.1366 11.0811 12 10.9396L10.0605 9.00011L12 7.06061C12.1406 6.91996 12.2195 6.72923 12.2195 6.53036C12.2195 6.33148 12.1406 6.14075 12 6.00011Z' fill='%232784FC'/%3E%3Cpath d='M9 0C7.21997 0 5.47991 0.527841 3.99987 1.51677C2.51983 2.50571 1.36628 3.91131 0.685088 5.55585C0.00389957 7.20038 -0.17433 9.00998 0.172937 10.7558C0.520204 12.5016 1.37737 14.1053 2.63604 15.364C3.89472 16.6226 5.49836 17.4798 7.24419 17.8271C8.99002 18.1743 10.7996 17.9961 12.4442 17.3149C14.0887 16.6337 15.4943 15.4802 16.4832 14.0001C17.4722 12.5201 18 10.78 18 9C17.9974 6.61384 17.0484 4.32616 15.3611 2.63889C13.6738 0.951621 11.3862 0.00258081 9 0V0ZM9 16.5C7.51664 16.5 6.0666 16.0601 4.83323 15.236C3.59986 14.4119 2.63856 13.2406 2.07091 11.8701C1.50325 10.4997 1.35473 8.99168 1.64411 7.53682C1.9335 6.08197 2.64781 4.74559 3.6967 3.6967C4.7456 2.64781 6.08197 1.9335 7.53683 1.64411C8.99168 1.35472 10.4997 1.50325 11.8701 2.0709C13.2406 2.63856 14.4119 3.59985 15.236 4.83322C16.0601 6.06659 16.5 7.51664 16.5 9C16.4978 10.9885 15.7069 12.8948 14.3009 14.3009C12.8948 15.7069 10.9885 16.4978 9 16.5Z' fill='%232784FC'/%3E%3C/g%3E%3Cdefs%3E%3CclipPath id='clip0_1950_14019'%3E%3Crect width='18' height='18' fill='white'/%3E%3C/clipPath%3E%3C/defs%3E%3C/svg%3E%0A"
+    );
+
+    display: block;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    background-color: currentColor;
+  }
+}
+.content {
+  padding: 30px;
+}

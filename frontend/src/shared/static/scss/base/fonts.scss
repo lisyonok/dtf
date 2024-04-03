@@ -1,0 +1,29 @@
+$fontsPath: "../../fonts/";
+
+@font-face {
+  font-family: "Inter";
+  font-weight: 400;
+  font-style: normal;
+  font-display: block;
+  src:
+    url("#{$fontsPath}/Inter-Regular.woff2") format("woff2"),
+    url("#{$fontsPath}/Inter-Regular.woff") format("woff");
+}
+@font-face {
+  font-family: "Inter";
+  font-weight: 500;
+  font-style: normal;
+  font-display: block;
+  src:
+    url("#{$fontsPath}/Inter-Medium.woff2") format("woff2"),
+    url("#{$fontsPath}/Inter-Medium.woff") format("woff");
+}
+@font-face {
+  font-family: "Inter";
+  font-weight: 700;
+  font-style: normal;
+  font-display: block;
+  src:
+    url("#{$fontsPath}/Inter-Bold.woff2") format("woff2"),
+    url("#{$fontsPath}/Inter-Bold.woff") format("woff");
+}

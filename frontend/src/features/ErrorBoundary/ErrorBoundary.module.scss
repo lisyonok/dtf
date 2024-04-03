@@ -1,0 +1,6 @@
+@import "src/shared/static/scss/helpers/index";
+
+.errorBoundary {
+  padding: 2em 1em;
+  border: $red 1px dashed;
+}

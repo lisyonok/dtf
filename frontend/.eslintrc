@@ -1,0 +1,12 @@
+{
+  "extends": ["react-app", "eslint:recommended", "prettier"],
+  "plugins": ["prettier"],
+  "rules": {
+    "no-unused-vars": "warn",
+    "react-hooks/exhaustive-deps": "off",
+    "prettier/prettier": ["error", {
+      "endOfLine":"lf"
+    }]
+  }
+}
+  

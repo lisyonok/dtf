@@ -1,0 +1,96 @@
+stages:
+  - lint
+  - deploy
+
+front:
+  image: node:16.20.1
+  stage: lint
+  only:
+    variables:
+      - $GITLAB_MIRROR != "true"
+  before_script:
+    - yarn install --frozen-lockfile
+  script:
+    - yarn lint:check
+
+lk-leto.krit.studio:
+  image: node:16.20.1
+  stage: deploy
+  only:
+    variables:
+      - $GITLAB_MIRROR != "true"
+  variables:
+    # site DOCUMENT_ROOT path
+    DOCUMENT_ROOT: "/home/bitrix/lk.leto.tver.ru"
+    # site template path. Set "" if 'build' folder locate into DOCUMENT_ROOT
+    TEMPLATE_PATH: ""
+    # build folder name
+    BUILD_FOLDER: "build"
+  before_script:
+    - apt-get update
+    - apt-get install sshpass
+
+    - echo "nameserver 8.8.8.8" > /etc/resolv.conf
+
+  script:
+    - sshpass -p"$MAIN_HOST_SSH_PASS" ssh -o 'StrictHostKeyChecking=no' $MAIN_HOST_SSH_USER@$MAIN_HOST_URL -p$MAIN_HOST_SSH_PORT "
+      cd $DOCUMENT_ROOT/$TEMPLATE_PATH &&
+      git fetch &&
+      git checkout $CI_COMMIT_BRANCH &&
+      git pull origin $CI_COMMIT_BRANCH &&
+      yarn &&
+      yarn build && 
+      forever stopall &&
+      forever start $DOCUMENT_ROOT/$TEMPLATE_PATH/server/index.js"
+    
+  when: manual
+
+lk.leto.tver.ru:
+  image: node:16.20.1
+  stage: deploy
+  needs: ["front"]
+  only:
+    variables:
+      - $GITLAB_MIRROR != "true"
+    refs:
+      - master
+  variables:
+    # site DOCUMENT_ROOT path
+    DOCUMENT_ROOT: "/home/bitrix/ext_www/lk.leto.tver.ru"
+    # site template path. Set "" if 'build' folder locate into DOCUMENT_ROOT
+    TEMPLATE_PATH: ""
+    # build folder name
+    BUILD_FOLDER: "build"
+  before_script:
+    - apt-get update
+    - apt-get install sshpass
+    - apt-get install rsync -y
+
+    - echo "nameserver 8.8.8.8" > /etc/resolv.conf
+
+    # install and build
+    - yarn install --frozen-lockfile
+    - yarn build
+
+  script:
+    # front deploy to main host
+    ## delete failured build folder if exist
+    - sshpass -p"$PROD_SSH_PASS" ssh -o 'StrictHostKeyChecking=no' $PROD_SSH_USER@$PROD_HOST_IP -p$PROD_SSH_PORT "if test -d $DOCUMENT_ROOT/$TEMPLATE_PATH/${BUILD_FOLDER}_tmp/; then rm -rf $DOCUMENT_ROOT/$TEMPLATE_PATH/${BUILD_FOLDER}_tmp/; fi"
+    - sshpass -p"$PROD_SSH_PASS" ssh -o 'StrictHostKeyChecking=no' $PROD_SSH_USER@$PROD_HOST_IP -p$PROD_SSH_PORT "if test -d $DOCUMENT_ROOT/$TEMPLATE_PATH/${BUILD_FOLDER}_tmp/; then rmdir $DOCUMENT_ROOT/$TEMPLATE_PATH/${BUILD_FOLDER}_tmp/; fi"
+
+    ## set 755 rights for folders and 644 for files
+    - find $CI_PROJECT_DIR/$TEMPLATE_PATH/${BUILD_FOLDER} -type d -exec chmod 755 {} \;
+    - find $CI_PROJECT_DIR/$TEMPLATE_PATH/${BUILD_FOLDER} -type f -exec chmod 644 {} \;
+
+    ## create tmp build dir and sync build results into
+    - sshpass -p"$PROD_SSH_PASS" ssh -o 'StrictHostKeyChecking=no' $PROD_SSH_USER@$PROD_HOST_IP -p$PROD_SSH_PORT "mkdir $DOCUMENT_ROOT/$TEMPLATE_PATH/${BUILD_FOLDER}_tmp/"
+    - sshpass -p"$PROD_SSH_PASS" rsync -e "ssh -p $PROD_SSH_PORT" --archive --verbose --progress $CI_PROJECT_DIR/$TEMPLATE_PATH/${BUILD_FOLDER}/ $PROD_SSH_USER@$PROD_HOST_IP:$DOCUMENT_ROOT/$TEMPLATE_PATH/${BUILD_FOLDER}_tmp/
+
+    ## change front path folder to new one
+    - sshpass -p"$PROD_SSH_PASS" ssh -o 'StrictHostKeyChecking=no' $PROD_SSH_USER@$PROD_HOST_IP -p$PROD_SSH_PORT "if test -d $DOCUMENT_ROOT/$TEMPLATE_PATH/${BUILD_FOLDER}; then mv $DOCUMENT_ROOT/$TEMPLATE_PATH/${BUILD_FOLDER} $DOCUMENT_ROOT/$TEMPLATE_PATH/${BUILD_FOLDER}_old; fi"
+    - sshpass -p"$PROD_SSH_PASS" ssh -o 'StrictHostKeyChecking=no' $PROD_SSH_USER@$PROD_HOST_IP -p$PROD_SSH_PORT "mv $DOCUMENT_ROOT/$TEMPLATE_PATH/${BUILD_FOLDER}_tmp $DOCUMENT_ROOT/$TEMPLATE_PATH/${BUILD_FOLDER}"
+
+    ## clean old front build
+    - sshpass -p"$PROD_SSH_PASS" ssh -o 'StrictHostKeyChecking=no' $PROD_SSH_USER@$PROD_HOST_IP -p$PROD_SSH_PORT "if test -d $DOCUMENT_ROOT/$TEMPLATE_PATH/${BUILD_FOLDER}_old; then rm -rf $DOCUMENT_ROOT/$TEMPLATE_PATH/${BUILD_FOLDER}_old; fi"
+    - sshpass -p"$PROD_SSH_PASS" ssh -o 'StrictHostKeyChecking=no' $PROD_SSH_USER@$PROD_HOST_IP -p$PROD_SSH_PORT "if test -d $DOCUMENT_ROOT/$TEMPLATE_PATH/${BUILD_FOLDER}_old; then rmdir $DOCUMENT_ROOT/$TEMPLATE_PATH/${BUILD_FOLDER}_old; fi"
+  when: manual

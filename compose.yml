@@ -1,0 +1,29 @@
+services:
+  front:
+    container_name: 'polls_frontend'
+    tty: true
+    stdin_open: true
+    build: ./frontend
+    pull_policy: build
+    labels:
+      caddy.reverse_proxy: '{{upstreams 80}}'
+      caddy: 'polls.thatsamefox.ru'
+    networks:
+      - caddy
+
+  back:
+    tty: true
+    stdin_open: true
+    build: ./backend
+    pull_policy: build
+    labels:
+      caddy.reverse_proxy: '{{upstreams 3001}}'
+      caddy: 'api.polls.thatsamefox.ru'
+    networks:
+      - caddy
+    deploy:
+        replicas: 3
+
+networks:
+  caddy:
+    external: true

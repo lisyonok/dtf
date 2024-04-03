@@ -1,0 +1,143 @@
+@import "src/shared/static/scss/helpers/index";
+
+.btn {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 4px 16px;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 17px;
+  color: $white;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: top;
+  background-color: $green;
+  border: 0;
+  border-radius: 25px;
+  transition: all 0.3s ease;
+
+
+  @include hovering {
+    &:hover,
+    &:focus {
+      background-color: $greenHover;
+    }
+
+    &:active {
+      background-color: $greenActive;
+    }
+  }
+}
+
+.red {
+  background-color: $red;
+  opacity: 0.5;
+
+  @include hovering {
+    &:hover,
+    &:focus {
+      opacity: 1;
+      background-color: $redHover;
+    }
+
+    &:active {
+      background-color: $redActive;
+    }
+  }
+}
+
+
+.green {
+  background-color: $green;
+
+  @include hovering {
+    &:hover,
+    &:focus {
+      background-color: $greenHover;
+    }
+  }
+
+  &:active {
+    background-color: $greenActive;
+  }
+}
+
+.blue {
+  background-color: $blue;
+
+  @include hovering {
+    &:hover,
+    &:focus {
+      background-color: $blueHover;
+    }
+
+    &:active {
+      background-color: $blueActive;
+    }
+  }
+}
+
+.bluelight {
+  background-color: $blue3;
+
+  @include hovering {
+    &:hover,
+    &:focus {
+      background-color: $blue;
+    }
+  }
+
+  &:active {
+    background-color: $blueActive;
+  }
+}
+
+.bordered {
+  color: $blue3;
+  background-color: transparent;
+  border: 1px solid $blue3;
+
+  @include hovering {
+    &:hover,
+    &:focus {
+      color: $blue;
+      background-color: transparent;
+      border: 1px solid $blue;
+    }
+  }
+
+  &:active {
+    color: $blueActive;
+    background-color: transparent;
+    border: 1px solid $blueActive;
+  }
+}
+
+.btn:disabled,
+.disable {
+  pointer-events: none;
+  cursor: default;
+  background-color: $disabled;
+}
+
+.simpleButton {
+  width: fit-content;
+  height: fit-content;
+  margin: 0;
+  margin-bottom: 16px;
+  padding: 0;
+  font-weight: 500;
+  color: $blue3;
+  background: none;
+
+  @include hovering {
+    &:hover,
+    &:focus {
+      color: $blueActive;
+      background: none;
+    }
+  }
+}

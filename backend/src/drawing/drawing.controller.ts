@@ -8,7 +8,7 @@ export class DrawingController {
   constructor(private drawingService: DrawingService) {}
 
   @Post("/create")
-  async create(@Body() createDto: Drawing, @Req() req: Request) {
+  async create(@Body() createDto: { drawing: string }, @Req() req: Request) {
     return this.drawingService.createDrawing(createDto, req.cookies.token)
   }
 

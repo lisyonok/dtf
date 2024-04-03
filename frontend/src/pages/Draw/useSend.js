@@ -5,7 +5,7 @@ export default function useSend({ $canvas }) {
   const [trigger, result] = useSendCanvasMutation()
 
   const send = () => {
-    const base64image = $canvas.toDataURL()
+    const base64image = $canvas.current.toDataURL()
     trigger({ drawing: base64image })
   }
 

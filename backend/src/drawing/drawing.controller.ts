@@ -3,7 +3,7 @@ import { Body, Controller, Get, Param, Post, Req } from "@nestjs/common"
 import { DrawingService, Drawing } from "./drawing.service"
 import { Request } from "express"
 
-@Controller("drawing")
+@Controller("api/drawing")
 export class DrawingController {
   constructor(private drawingService: DrawingService) {}
 

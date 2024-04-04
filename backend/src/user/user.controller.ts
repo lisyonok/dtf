@@ -3,7 +3,7 @@ import type { Response, Request } from "express"
 
 import { UserService, LoginCredentals } from "./user.service"
 
-@Controller("user")
+@Controller("api/user")
 export class UserController {
   constructor(private userService: UserService) {}
 

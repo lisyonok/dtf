@@ -67,7 +67,7 @@ export class DrawingService {
         User: { select: { username: true } }
       },
       take: 100,
-      orderBy: { createdAt: "asc" }
+      orderBy: { createdAt: "desc" }
     })
 
     const cards = drawings.map((drawing) => ({

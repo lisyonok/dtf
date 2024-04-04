@@ -24,6 +24,8 @@ services:
     networks:
       - caddy
       - dtf
+    volumes:
+      - /home/nick/dtf/upload:/usr/src/app/upload
 
   db:
     image: postgres:16
@@ -37,6 +39,8 @@ services:
         limits:
           cpus: '1'
           memory: 1G
+    volumes:
+      - /home/nick/dtf/db:/var/lib/postgresql/data
 
     networks:
       dtf:

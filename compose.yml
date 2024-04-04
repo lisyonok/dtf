@@ -12,15 +12,15 @@ services:
     container_name: 'dtf_backend'
     build: ./backend
     labels:
-      caddy_0: dtf.thatsamefox.ru
-      caddy_0.handle_path: /api/*
-      caddy_0.handle_path.0_rewrite: * /api{uri}
-      caddy_0.handle_path.1_reverse_proxy: {{upstreams 3001}}
+      caddy_0: "dtf.thatsamefox.ru"
+      caddy_0.handle_path: "/api/*"
+      caddy_0.handle_path.0_rewrite: "* /api{uri}"
+      caddy_0.handle_path.1_reverse_proxy: "{{upstreams 3001}}"
 
-      caddy_1: dtf.thatsamefox.ru
-      caddy_1.handle_path: /upload/*
-      caddy_1.handle_path.0_rewrite: * /upload{uri}
-      caddy_1.handle_path.1_reverse_proxy: {{upstreams 3001}}
+      caddy_1: "dtf.thatsamefox.ru"
+      caddy_1.handle_path: "/upload/*"
+      caddy_1.handle_path.0_rewrite: "* /upload{uri}"
+      caddy_1.handle_path.1_reverse_proxy: "{{upstreams 3001}}"
     networks:
       - caddy
       - dtf

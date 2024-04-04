@@ -4,10 +4,9 @@ import { useGetDrawingsQuery } from "features/api/services/site"
 import Modal from "shared/ui/Modal/Modal"
 import modalCss from "shared/ui/Modal/Modal.module.scss"
 import { Link } from "react-router-dom"
-import Button from "shared/ui/Button/Button"
 
 function Drawings() {
-  const { data, isLoading, isError, error } = useGetDrawingsQuery()
+  const { data, isLoading, isError, error } = useGetDrawingsQuery(null, { refetchOnMountOrArgChange: true })
 
   if (isError)
     return (

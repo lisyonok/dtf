@@ -66,7 +66,7 @@ export class DrawingService {
       include: {
         User: { select: { username: true } }
       },
-      take: 20,
+      take: 100,
       orderBy: { createdAt: "asc" }
     })
 

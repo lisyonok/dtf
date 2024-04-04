@@ -50,7 +50,7 @@ export class DrawingService {
       }
     })
 
-    if (!drawing) throw new NotFoundException({ ok: false, reason: "Опрос не найден" })
+    if (!drawing) throw new NotFoundException({ ok: false, reason: "Рисунок не найден" })
 
     const {
       pathToFullSize,

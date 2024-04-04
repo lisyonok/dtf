@@ -17,7 +17,7 @@ export class UserController {
   @Post("/login")
   async login(@Res({ passthrough: true }) response: Response, @Body() body: LoginCredentals) {
     const { ok, reason, token } = await this.userService.login(body)
-    if (token) response.cookie("token", token, { httpOnly: true, secure: true })
+    if (token) response.cookie("token", token, { httpOnly: true, secure: true, maxAge: 3_600_000 * 24 * 7 })
     return { ok, reason }
   }
 

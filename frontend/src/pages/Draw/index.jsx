@@ -2,12 +2,14 @@ import { useRef } from "react"
 import css from "./draw.module.scss"
 import useDraw from "./useDraw"
 import Button from "shared/ui/Button/Button"
-import useSend from "./useSend"
+import useSave from "./useSend"
+import LoginModal from "./modals/loginModal"
+import SaveModal from "./modals/saveModal"
 
 function Draw() {
   const $canvas = useRef(null)
   const { draw, color, onColor, size, onSize, mouseDown, clear } = useDraw({ $canvas })
-  const { send } = useSend({ $canvas })
+  const { save, saveResult } = useSave({ $canvas })
 
   return (
     <div className={css.container}>
@@ -20,10 +22,12 @@ function Draw() {
           Clear
         </Button>
 
-        <Button kind="green" onClick={send}>
+        <Button kind="green" onClick={save}>
           Save
         </Button>
       </div>
+      <LoginModal />
+      <SaveModal saveResult={saveResult} />
     </div>
   )
 }

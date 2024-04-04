@@ -14,55 +14,52 @@ export class DrawingService {
       include: { User: true }
     })
 
-    // if (!session?.User) throw new UnauthorizedException({ ok: false, reason: "Пользователь не авторизован" })
+    if (!session?.User) throw new UnauthorizedException({ ok: false, reason: "Пользователь не авторизован" })
 
-    console.log(__dirname)
     const filename = `${nanoid(32)}.png`
+    const pathToFile = path.join(pathToFullSize, filename)
     const data = drawing.replace(/^data:image\/png;base64,/, "")
-    await fs.writeFile(path.join(pathToFullSize, filename), data, "base64")
+    await fs.writeFile(pathToFile, data, "base64")
 
-    // const drawing = await prisma.drawing.create({
-    //   data: {}
-    // })
+    const drawingRecord = await prisma.drawing.create({
+      data: {
+        pathToFullSize: "/drawings/" + filename,
+        userId: session.User.id
+      }
+    })
 
-    return { ok: true, id: 0 }
+    const permaLink = `/drawing/${drawingRecord.id}`
+
+    return { ok: true, id: drawingRecord.id, url: permaLink }
   }
 
-  // async getDrawing(id: string, token: string) {
-  //   if (!checkId(id)) throw new BadRequestException({ ok: false, reason: "Неверный id опроса" })
+  async getDrawing(id: string) {
+    if (!checkId(id)) throw new BadRequestException({ ok: false, reason: "Неверный id рисунка" })
 
-  //   const session = await prisma.session.findFirst({
-  //     where: { token },
-  //     include: { User: true }
-  //   })
+    // const session = await prisma.session.findFirst({
+    //   where: { token },
+    //   include: { User: true }
+    // })
 
-  //   if (!session?.User) throw new UnauthorizedException({ ok: false, reason: "Пользователь не авторизован" })
+    // if (!session?.User) throw new UnauthorizedException({ ok: false, reason: "Пользователь не авторизован" })
 
-  //   const drawing: Drawing = await prisma.drawing.updateIgnoreOnNotFound({
-  //     data: { views: { increment: 1 } },
-  //     where: { id },
-  //     include: {
-  //       persons: {
-  //         include: {
-  //           questions: {
-  //             include: { questionAnswers: { select: { id: true, title: true }, orderBy: { order: "asc" } } }
-  //           }
-  //         }
-  //       }
-  //     }
-  //   })
+    const drawing = await prisma.drawing.findFirst({
+      where: { id },
+      include: {
+        User: { select: { username: true } }
+      }
+    })
 
-  //   if (!drawing) throw new NotFoundException({ ok: false, reason: "Опрос не найден" })
+    if (!drawing) throw new NotFoundException({ ok: false, reason: "Опрос не найден" })
 
-  //   const drawingTry = await prisma.poolTry.create({
-  //     data: {
-  //       userId: session.User.id,
-  //       drawingId: drawing.id
-  //     }
-  //   })
+    const {
+      pathToFullSize,
+      User: { username },
+      createdAt
+    } = drawing
 
-  //   return { ...drawing, tryId: drawingTry.id }
-  // }
+    return { ok: true, path: pathToFullSize, createdAt, username }
+  }
 }
 
 export type Drawing = {
@@ -74,9 +71,9 @@ export type Drawing = {
 
 export type DrawingResults = object
 
-// function checkId(ObjectId: string): boolean {
-//   if (ObjectId.length !== 36) return false
-//   if (!/^[0-9a-f-]{36}$/i.test(ObjectId)) return false
+function checkId(ObjectId: string): boolean {
+  if (ObjectId.length !== 36) return false
+  if (!/^[0-9a-f-]{36}$/i.test(ObjectId)) return false
 
-//   return true
-// }
+  return true
+}

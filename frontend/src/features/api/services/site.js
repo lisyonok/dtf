@@ -9,8 +9,11 @@ export const siteApi = createApi({
   endpoints: (builder) => ({
     sendCanvas: builder.mutation({
       query: ({ drawing }) => ({ url: `drawing/create`, method: "POST", body: { drawing } })
+    }),
+    getDrawing: builder.query({
+      query: ({ id }) => ({ url: `drawing/${id}` })
     })
   })
 })
 
-export const { useSendCanvasMutation } = siteApi
+export const { useSendCanvasMutation, useGetDrawingQuery } = siteApi

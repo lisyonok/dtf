@@ -42,20 +42,15 @@
   }
 
   &_btns {
-    button {
-      width: 100%;
-      max-width: 360px;
-      &:first-child {
-        margin-bottom: 16px;
-      }
-    }
+    display: flex;
+    gap: 16px;
   }
 }
 .inner {
   position: relative;
   transform: translateY(0);
-  width: 100%;
-  max-width: 373px;
+  width: 90%;
+  max-width: 420px;
   margin: 24px auto;
   opacity: 1;
   background-color: $white;

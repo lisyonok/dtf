@@ -1,29 +1,51 @@
 services:
   front:
-    container_name: 'polls_frontend'
-    tty: true
-    stdin_open: true
+    container_name: 'dtf_frontend'
     build: ./frontend
-    pull_policy: build
     labels:
       caddy.reverse_proxy: '{{upstreams 80}}'
-      caddy: 'polls.thatsamefox.ru'
+      caddy: 'dtf.thatsamefox.ru'
     networks:
       - caddy
 
   back:
-    tty: true
-    stdin_open: true
+    container_name: 'dtf_backend'
     build: ./backend
-    pull_policy: build
     labels:
-      caddy.reverse_proxy: '{{upstreams 3001}}'
-      caddy: 'api.polls.thatsamefox.ru'
+      caddy_0: dtf.thatsamefox.ru
+      caddy_0.handle_path: /api/*
+      caddy_0.handle_path.0_rewrite: * /api{uri}
+      caddy_0.handle_path.1_reverse_proxy: {{upstreams 3001}}
+
+      caddy_1: dtf.thatsamefox.ru
+      caddy_1.handle_path: /upload/*
+      caddy_1.handle_path.0_rewrite: * /upload{uri}
+      caddy_1.handle_path.1_reverse_proxy: {{upstreams 3001}}
     networks:
       - caddy
+      - dtf
+
+  db:
+    image: postges
+    container_name: 'dtf_database'
+    environment:
+      POSTGRES_DB: "dtf"
+      POSTGRES_USER: "root"
+      POSTGRES_PASSWORD: "zsfha4ewyqaTftkd57nire564yhyse"
     deploy:
-        replicas: 3
+      resources:
+        limits:
+          cpus: '1'
+          memory: 1G
+
+    networks:
+      dtf:
+        aliases:
+          - postgress
+
+  
 
 networks:
   caddy:
     external: true
+  dtf:

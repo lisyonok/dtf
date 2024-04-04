@@ -11,7 +11,6 @@ services:
   back:
     container_name: 'dtf_backend'
     build: ./backend
-    env_file: ./backend/prod.env
     labels:
       caddy_0: "dtf.thatsamefox.ru"
       caddy_0.handle_path: "/api/*"

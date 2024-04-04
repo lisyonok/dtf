@@ -15,7 +15,7 @@ RUN yarn install
 COPY . .
 
 # Creates a "dist" folder with the production build
-RUN npx prisma migrate deploy 
+# RUN npx prisma migrate deploy 
 RUN npx prisma generate
 RUN yarn build
 

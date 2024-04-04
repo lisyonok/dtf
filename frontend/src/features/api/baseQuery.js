@@ -1,7 +1,7 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query"
 
 export default fetchBaseQuery({
-  baseUrl: "http://localhost:3001/",
+  baseUrl: process.env.REACT_APP_API_URL,
   async responseHandler(response) {
     return await response.json()
   },

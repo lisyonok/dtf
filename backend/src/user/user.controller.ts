@@ -11,7 +11,7 @@ export class UserController {
   async root(@Req() request: Request) {
     const { User } = (await this.userService.getSession(request.cookies.token)) || {}
     if (!User) return { ok: false, reason: "Unauthorized" }
-    return { ...User, pass: undefined }
+    return { ok: true, ...User, pass: undefined }
   }
 
   @Post("/login")

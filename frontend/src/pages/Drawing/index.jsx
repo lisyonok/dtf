@@ -3,6 +3,7 @@ import css from "./drawing.module.scss"
 import { useGetDrawingQuery } from "features/api/services/site"
 import Modal from "shared/ui/Modal/Modal"
 import modalCss from "shared/ui/Modal/Modal.module.scss"
+import Button from "shared/ui/Button/Button"
 
 function Drawing() {
   const { id } = useParams()
@@ -18,11 +19,12 @@ function Drawing() {
 
   return (
     <div className={css.container}>
-      <img src={"http://localhost:3001" + data.path} alt="" />
+      <img src={process.env.REACT_APP_API_URL + data.path} alt="" />
 
       <div className={css.attribution}>
         <div className={css.name}>{data.username}</div>
         <div className={css.date}>at {new Date(data.createdAt).toLocaleString()}</div>
+        <Button to={"/"}>Я тоже хочу рисовать</Button>
       </div>
     </div>
   )

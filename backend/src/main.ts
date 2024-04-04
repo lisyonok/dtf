@@ -3,6 +3,7 @@ import { AppModule } from "./app.module"
 import * as cookieParser from "cookie-parser"
 import { checkFolders, upload } from "./files"
 import { NestExpressApplication } from "@nestjs/platform-express"
+import { json } from "express"
 
 async function bootstrap() {
   checkFolders()
@@ -17,7 +18,8 @@ async function bootstrap() {
     optionsSuccessStatus: 204
   })
 
-  app.useStaticAssets(upload)
+  app.use(json({ limit: "50mb" }))
+  app.useStaticAssets(upload, { prefix: "/upload/" })
 
   await app.listen(3001)
 }

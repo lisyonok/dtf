@@ -23,7 +23,7 @@ export class DrawingService {
 
     const drawingRecord = await prisma.drawing.create({
       data: {
-        pathToFullSize: "/drawings/" + filename,
+        pathToFullSize: "/upload/drawings/" + filename,
         userId: session.User.id
       }
     })

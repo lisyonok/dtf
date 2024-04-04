@@ -6,13 +6,13 @@ import Modal from "shared/ui/Modal/Modal"
 import modalCss from "shared/ui/Modal/Modal.module.scss"
 
 export default function LoginModal() {
-  const { data: user } = useGetUserQuery()
+  const { data: user, isLoading } = useGetUserQuery()
   const [username, setUsername] = useState("")
   const [login, loginResult] = useLoginMutation()
 
   return (
     <>
-      <Modal opened={!user?.ok && loginResult.isUninitialized}>
+      <Modal opened={!isLoading && !user?.ok && loginResult.isUninitialized}>
         <div className={modalCss.modal_title}>Вы не авторизованны</div>
         <div className={modalCss.modal_text}>Выберите себе никнейм. Под ним мы сохраним ваши рисунки</div>
         <div className={modalCss.modal_btns}>

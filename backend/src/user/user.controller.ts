@@ -10,21 +10,21 @@ export class UserController {
   @Get("/")
   async root(@Req() request: Request) {
     const { User } = (await this.userService.getSession(request.cookies.token)) || {}
-    if (!User) return { ok: false, reason: "Unauthorized" }
+    if (!User) return { ok: false, message: "Unauthorized" }
     return { ok: true, ...User, pass: undefined }
   }
 
   @Post("/login")
   async login(@Res({ passthrough: true }) response: Response, @Body() body: LoginCredentals) {
-    const { ok, reason, token } = await this.userService.login(body)
+    const { ok, message, token } = await this.userService.login(body)
     if (token) response.cookie("token", token, { httpOnly: true, secure: true, maxAge: 3_600_000 * 24 * 7 })
-    return { ok, reason }
+    return { ok, message }
   }
 
   @Get("/logout")
   async logout(@Req() request: Request, @Res({ passthrough: true }) response: Response) {
-    const { ok, reason } = await this.userService.logout(request.cookies.token)
+    const { ok, message } = await this.userService.logout(request.cookies.token)
     if (ok) response.cookie("token", "", { httpOnly: true, secure: true })
-    return { ok, reason }
+    return { ok, message }
   }
 }

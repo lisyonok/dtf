@@ -12,8 +12,13 @@ export class DrawingController {
     return this.drawingService.createDrawing(createDto, req.cookies.token)
   }
 
+  @Get("/list")
+  async getDrawings() {
+    return this.drawingService.getDrawings()
+  }
+
   @Get("/:id")
-  async getDrawing(@Param("id") id: string, @Req() req: Request) {
-    return this.drawingService.getDrawing(id /* , req.cookies.token */)
+  async getDrawing(@Param("id") id: string) {
+    return this.drawingService.getDrawing(id)
   }
 }

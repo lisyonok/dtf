@@ -12,8 +12,11 @@ export const siteApi = createApi({
     }),
     getDrawing: builder.query({
       query: ({ id }) => ({ url: `drawing/${id}` })
+    }),
+    getDrawings: builder.query({
+      query: () => ({ url: `drawing/list` })
     })
   })
 })
 
-export const { useSendCanvasMutation, useGetDrawingQuery } = siteApi
+export const { useSendCanvasMutation, useGetDrawingQuery, useGetDrawingsQuery } = siteApi

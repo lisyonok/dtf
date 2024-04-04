@@ -14,7 +14,7 @@ export class DrawingService {
       include: { User: true }
     })
 
-    if (!session?.User) throw new UnauthorizedException({ ok: false, reason: "Пользователь не авторизован" })
+    if (!session?.User) throw new UnauthorizedException({ ok: false, message: "Пользователь не авторизован" })
 
     const filename = `${nanoid(32)}.png`
     const pathToFile = path.join(pathToFullSize, filename)
@@ -34,14 +34,14 @@ export class DrawingService {
   }
 
   async getDrawing(id: string) {
-    if (!checkId(id)) throw new BadRequestException({ ok: false, reason: "Неверный id рисунка" })
+    if (!checkId(id)) throw new BadRequestException({ ok: false, message: "Неверный id рисунка" })
 
     // const session = await prisma.session.findFirst({
     //   where: { token },
     //   include: { User: true }
     // })
 
-    // if (!session?.User) throw new UnauthorizedException({ ok: false, reason: "Пользователь не авторизован" })
+    // if (!session?.User) throw new UnauthorizedException({ ok: false, message: "Пользователь не авторизован" })
 
     const drawing = await prisma.drawing.findFirst({
       where: { id },
@@ -50,7 +50,7 @@ export class DrawingService {
       }
     })
 
-    if (!drawing) throw new NotFoundException({ ok: false, reason: "Рисунок не найден" })
+    if (!drawing) throw new NotFoundException({ ok: false, message: "Рисунок не найден" })
 
     const {
       pathToFullSize,
@@ -59,6 +59,25 @@ export class DrawingService {
     } = drawing
 
     return { ok: true, path: pathToFullSize, createdAt, username }
+  }
+
+  async getDrawings() {
+    const drawings = await prisma.drawing.findMany({
+      include: {
+        User: { select: { username: true } }
+      },
+      take: 20,
+      orderBy: { createdAt: "asc" }
+    })
+
+    const cards = drawings.map((drawing) => ({
+      id: drawing.id,
+      username: drawing.User.username,
+      createdAt: drawing.createdAt,
+      path: drawing.pathToFullSize
+    }))
+
+    return { ok: true, cards }
   }
 }
 

@@ -19,12 +19,12 @@ function Draw() {
         <input type="range" value={size} min={1} max={40} onChange={onSize} />
         <input type="color" value={color} onChange={onColor} />
         <Button kind="red" onClick={clear}>
-          Clear
+          Очистить
         </Button>
 
-        <Button kind="green" onClick={save}>
-          Save
-        </Button>
+        <Button onClick={save}>Сохранить</Button>
+
+        <Button to={"/drawings"}>Смотреть другие</Button>
       </div>
       <LoginModal />
       <SaveModal saveResult={saveResult} />

@@ -1,15 +1,22 @@
-import { Navigate, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import css from "./drawing.module.scss"
 import { useGetDrawingQuery } from "features/api/services/site"
 import Modal from "shared/ui/Modal/Modal"
 import modalCss from "shared/ui/Modal/Modal.module.scss"
 import Button from "shared/ui/Button/Button"
+import { prepareError } from "features/api/prepareError"
 
 function Drawing() {
   const { id } = useParams()
-  const { data, isError, isLoading } = useGetDrawingQuery({ id })
+  const { data, isError, isLoading, error } = useGetDrawingQuery({ id })
 
-  if (isError) return <Navigate to={"/"} />
+  if (isError)
+    return (
+      <Modal opened={isError}>
+        <div className={modalCss.modal_title}>Ошибка</div>
+        <div className={modalCss.modal_text}>{error && prepareError(error)}</div>
+      </Modal>
+    )
   if (isLoading)
     return (
       <Modal opened={isLoading}>
@@ -24,7 +31,8 @@ function Drawing() {
       <div className={css.attribution}>
         <div className={css.name}>{data.username}</div>
         <div className={css.date}>at {new Date(data.createdAt).toLocaleString()}</div>
-        <Button to={"/"}>Я тоже хочу рисовать</Button>
+        <Button to={"/"}>Рисовать</Button>
+        <Button to={"/drawings"}>Смотреть другие</Button>
       </div>
     </div>
   )

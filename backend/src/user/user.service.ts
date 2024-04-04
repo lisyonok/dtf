@@ -16,7 +16,7 @@ export class UserService {
   }
 
   async login({ username }: LoginCredentals) {
-    if (!username) return { ok: false, reason: "Введите Никнэйм" }
+    if (!username) return { ok: false, message: "Введите Никнэйм" }
 
     const user = await prisma.user.upsert({
       where: {
@@ -41,13 +41,13 @@ export class UserService {
   }
 
   async logout(token: string) {
-    if (!token) return { ok: false, reason: "Too few arguments" }
+    if (!token) return { ok: false, message: "Too few arguments" }
 
     const session = await prisma.session.findFirst({
       where: { token }
     })
 
-    if (!session) return { ok: false, reason: "Session not found" }
+    if (!session) return { ok: false, message: "Session not found" }
 
     await prisma.session.delete({
       where: { id: session.id }

@@ -19,7 +19,7 @@ function Drawing() {
 
   return (
     <div className={css.container}>
-      <img src={process.env.REACT_APP_API_URL + data.path} alt="" />
+      <img src={process.env.REACT_APP_API_URL + data.path.replace("/", "")} alt="" />
 
       <div className={css.attribution}>
         <div className={css.name}>{data.username}</div>

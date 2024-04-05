@@ -9,16 +9,25 @@ export default function useDraw({ $canvas }) {
   useEffect(() => {
     const canvas = $canvas.current
     const ctx = canvas.getContext("2d")
-    canvas.width = window.innerWidth
-    canvas.height = window.innerHeight
-
     canvasCTX.current = ctx
+
+    function resize() {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+    resize()
+
+    window.addEventListener("resize", resize)
+    return () => window.removeEventListener("resize", resize)
   }, [$canvas])
 
   const onColor = (e) => setColor(e.target.value)
   const onSize = (e) => setSize(e.target.valueAsNumber)
+
   const updateMouse = (e) => {
-    $points.current.push({ x: e.clientX, y: e.clientY })
+    let { clientX, clientY } = e
+    if (e.type === "touchmove") ({ clientX, clientY } = e.changedTouches[0])
+    $points.current.push({ x: clientX, y: clientY })
     if ($points.current.length > 20) $points.current.shift()
   }
 
@@ -43,13 +52,13 @@ export default function useDraw({ $canvas }) {
   }
 
   const draw = (e) => {
-    if (e.buttons !== 1) return
+    if (e.buttons !== 1 && e.type !== "touchmove") return
     const ctx = canvasCTX.current
     const points = $points.current
 
     updateMouse(e)
 
-    ctx.moveTo(e.clientX, e.clientY)
+    // ctx.moveTo(e.clientX, e.clientY)
 
     if (points.length < 6) {
       var b = points[0]

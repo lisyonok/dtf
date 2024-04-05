@@ -13,13 +13,7 @@ function Draw() {
 
   return (
     <div className={css.container}>
-      <canvas
-        ref={$canvas}
-        onMouseMove={draw}
-        onTouchMove={draw}
-        onTouchStart={mouseDown}
-        onMouseDown={mouseDown}
-      ></canvas>
+      <canvas ref={$canvas} onPointerMove={draw} onPointerDown={mouseDown}></canvas>
 
       <div className={css.controls}>
         <input type="range" value={size} min={1} max={40} onChange={onSize} />

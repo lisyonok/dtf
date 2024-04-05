@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react"
 
 export default function useDraw({ $canvas }) {
   const canvasCTX = useRef(null)
-  const $points = useRef([])
+  const $mouse = useRef({ x: 0, y: 0 })
   const [color, setColor] = useState("#000000")
   const [size, setSize] = useState(10)
 
@@ -26,13 +26,10 @@ export default function useDraw({ $canvas }) {
 
   const updateMouse = (e) => {
     let { clientX, clientY } = e
-    if (e.type === "touchmove") ({ clientX, clientY } = e.changedTouches[0])
-    $points.current.push({ x: clientX, y: clientY })
-    if ($points.current.length > 20) $points.current.shift()
+    $mouse.current = { x: clientX, y: clientY }
   }
 
   const mouseDown = (e) => {
-    $points.current = []
     const ctx = canvasCTX.current
     updateMouse(e)
 
@@ -43,6 +40,7 @@ export default function useDraw({ $canvas }) {
     ctx.lineJoin = "round"
     ctx.lineCap = "round"
 
+    ctx.beginPath()
     draw(e)
   }
 
@@ -54,32 +52,12 @@ export default function useDraw({ $canvas }) {
   const draw = (e) => {
     if (e.buttons !== 1 && e.type !== "touchmove") return
     const ctx = canvasCTX.current
-    const points = $points.current
 
+    ctx.moveTo($mouse.current.x, $mouse.current.y)
     updateMouse(e)
 
-    // ctx.moveTo(e.clientX, e.clientY)
-
-    if (points.length < 6) {
-      var b = points[0]
-      ctx.beginPath()
-      ctx.arc(b.x, b.y, ctx.lineWidth / 2, 0, Math.PI * 2, !0)
-      ctx.closePath()
-      ctx.fill()
-      return
-    }
-    ctx.beginPath()
-
-    let i = 1
-    // draw a bunch of quadratics, using the average of two points as the control point
-    for (i; i < points.length - 2; i++) {
-      var c = (points[i].x + points[i + 1].x) / 2,
-        d = (points[i].y + points[i + 1].y) / 2
-      ctx.quadraticCurveTo(points[i].x, points[i].y, c, d)
-    }
-    ctx.quadraticCurveTo(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y)
+    ctx.lineTo(e.clientX, e.clientY)
     ctx.stroke()
-    ctx.closePath()
   }
 
   return { draw, color, onColor, size, onSize, mouseDown, clear }

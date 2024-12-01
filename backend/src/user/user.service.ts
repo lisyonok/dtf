@@ -1,6 +1,8 @@
 import { Injectable } from "@nestjs/common"
 import prisma from "src/lib/db"
 import { randomBytes } from "node:crypto"
+import { latticeHash } from "src/lib/passhash"
+import { generateKeys } from "src/lib/signs"
 
 @Injectable()
 export class UserService {
@@ -15,18 +17,20 @@ export class UserService {
     return session
   }
 
-  async login({ username }: LoginCredentals) {
+  async login({ username, password }: LoginCredentals) {
     if (!username) return { ok: false, message: "Введите Никнэйм" }
+    if (!password) return { ok: false, message: "Введите password" }
 
-    const user = await prisma.user.upsert({
-      where: {
-        username
-      },
-      update: {},
-      create: {
-        username
-      }
-    })
+    const passHash = latticeHash(password)
+
+    let user = await prisma.user.findUnique({ where: { username } })
+    if (user && user.password !== passHash) return { ok: false, message: "Неправильный пароль" }
+    if (!user) {
+      const { publicKey, privateKey } = generateKeys()
+      user = await prisma.user.create({
+        data: { username, password: passHash, publicKey: JSON.stringify(publicKey), privateKey: String(privateKey) }
+      })
+    }
 
     const token = randomBytes(32).toString("hex")
 
@@ -57,4 +61,4 @@ export class UserService {
   }
 }
 
-export type LoginCredentals = { username: string }
+export type LoginCredentals = { username: string; password: string }

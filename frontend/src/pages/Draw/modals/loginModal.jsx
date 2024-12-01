@@ -8,6 +8,7 @@ import modalCss from "shared/ui/Modal/Modal.module.scss"
 export default function LoginModal() {
   const { data: user, isLoading } = useGetUserQuery()
   const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
   const [login, loginResult] = useLoginMutation()
 
   return (
@@ -16,8 +17,15 @@ export default function LoginModal() {
         <div className={modalCss.modal_title}>Вы не авторизованны</div>
         <div className={modalCss.modal_text}>Выберите себе никнейм. Под ним мы сохраним ваши рисунки</div>
         <div className={modalCss.modal_btns}>
-          <input value={username} onInput={(e) => setUsername(e.target.value)} />
-          <Button onClick={() => login({ username })}>Авторизоваться</Button>
+          <label>
+            <span>Логин</span>
+            <input value={username} onInput={(e) => setUsername(e.target.value)} />
+          </label>
+          <label>
+            <span>Пароль</span>
+            <input value={password} onInput={(e) => setPassword(e.target.value)} />{" "}
+          </label>
+          <Button onClick={() => login({ username, password })}>Авторизоваться</Button>
         </div>
       </Modal>
 
@@ -28,6 +36,9 @@ export default function LoginModal() {
       <Modal opened={loginResult.isError}>
         <div className={modalCss.modal_title}>Ошибка</div>
         <div className={modalCss.modal_text}>{loginResult.isError && prepareError(loginResult.error)}</div>
+        <div className={modalCss.modal_btns}>
+          <Button onClick={() => loginResult.reset()}>Попробовать еще раз</Button>
+        </div>
       </Modal>
     </>
   )

@@ -5,6 +5,7 @@ import * as fs from "fs/promises"
 import { nanoid } from "nanoid"
 import * as path from "path"
 import { pathToFullSize } from "src/files"
+import { defParams, hashImage, signHash, verifySignature } from "src/lib/signs"
 
 @Injectable()
 export class DrawingService {
@@ -21,10 +22,15 @@ export class DrawingService {
     const data = drawing.replace(/^data:image\/png;base64,/, "")
     await fs.writeFile(pathToFile, data, "base64")
 
+    const imageHash = hashImage(Buffer.from(data))
+    //@ts-expect-error ????
+    const signature = JSON.stringify(signHash(imageHash, Number(session.User.privateKey), ...defParams))
+
     const drawingRecord = await prisma.drawing.create({
       data: {
         pathToFullSize: "/upload/drawings/" + filename,
-        userId: session.User.id
+        userId: session.User.id,
+        signature
       }
     })
 
@@ -36,29 +42,35 @@ export class DrawingService {
   async getDrawing(id: string) {
     if (!checkId(id)) throw new BadRequestException({ ok: false, message: "Неверный id рисунка" })
 
-    // const session = await prisma.session.findFirst({
-    //   where: { token },
-    //   include: { User: true }
-    // })
-
-    // if (!session?.User) throw new UnauthorizedException({ ok: false, message: "Пользователь не авторизован" })
-
     const drawing = await prisma.drawing.findFirst({
       where: { id },
       include: {
-        User: { select: { username: true } }
+        User: { select: { username: true, publicKey: true, privateKey: true } }
       }
     })
 
     if (!drawing) throw new NotFoundException({ ok: false, message: "Рисунок не найден" })
 
     const {
-      pathToFullSize,
+      pathToFullSize: imgUrl,
       User: { username },
-      createdAt
+      createdAt,
+      signature
     } = drawing
 
-    return { ok: true, path: pathToFullSize, createdAt, username }
+    const imagePath = path.join(pathToFullSize, imgUrl.replace("/upload/drawings/", ""))
+    const image = await fs.readFile(imagePath, "base64")
+    const imageHash = hashImage(Buffer.from(image))
+
+    const isSignVerified = verifySignature(
+      imageHash,
+      JSON.parse(signature),
+      JSON.parse(drawing.User.publicKey),
+      //@ts-expect-error ????
+      ...defParams
+    )
+
+    return { ok: true, path: imgUrl, createdAt, username, signature, isSignVerified }
   }
 
   async getDrawings() {

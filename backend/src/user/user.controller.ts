@@ -18,6 +18,7 @@ export class UserController {
   async login(@Res({ passthrough: true }) response: Response, @Body() body: LoginCredentals) {
     const { ok, message, token } = await this.userService.login(body)
     if (token) response.cookie("token", token, { httpOnly: true, secure: true, maxAge: 3_600_000 * 24 * 7 })
+    if (!ok) response.status(403)
     return { ok, message }
   }
 

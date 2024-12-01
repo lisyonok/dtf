@@ -14,9 +14,14 @@ model User {
   id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime? @default(now())
   username  String    @unique
+  password  String
   points    Int       @default(0)
-  sessions  Session[]
-  drawings   Drawing[]
+
+  privateKey String
+  publicKey  String
+
+  sessions Session[]
+  drawings Drawing[]
 }
 
 model Session {
@@ -32,8 +37,10 @@ model Drawing {
   id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime? @default(now())
 
-  pathToFullSize String?
-  pathToThumbnail String? 
+  signature String
+
+  pathToFullSize  String?
+  pathToThumbnail String?
 
   User   User?   @relation(fields: [userId], references: [id])
   userId String? @db.Uuid

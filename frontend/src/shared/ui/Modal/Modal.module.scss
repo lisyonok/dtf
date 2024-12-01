@@ -47,6 +47,10 @@
     display: flex;
     flex-wrap: wrap;
     gap: 16px;
+
+    span {
+      margin-right: 8px ;
+    }
   }
 }
 .inner {

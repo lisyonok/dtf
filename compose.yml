@@ -2,15 +2,21 @@ services:
   front:
     container_name: 'dtf_frontend'
     build: ./frontend
+    env_file: .env
     labels:
       caddy.reverse_proxy: '{{upstreams 80}}'
       caddy: 'dtf.thatsamefox.ru'
     networks:
       - caddy
+    environment:
+      GENERATE_SOURCEMAP: false
 
   back:
     container_name: 'dtf_backend'
     build: ./backend
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgress:5432/${POSTGRES_DB}?connection_limit=15
     labels:
       caddy_0: "dtf.thatsamefox.ru"
       caddy_0.handle_path: "/api/*"
@@ -30,10 +36,11 @@ services:
   db:
     image: postgres:16
     container_name: 'dtf_database'
+    env_file: .env
     environment:
-      POSTGRES_DB: "dtf"
-      POSTGRES_USER: "root"
-      POSTGRES_PASSWORD: "zsfha4ewyqaTftkd57nire564yhyse"
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     deploy:
       resources:
         limits:
@@ -41,15 +48,10 @@ services:
           memory: 1G
     volumes:
       - /home/nick/dtf/db:/var/lib/postgresql/data
-    ports:
-      - 32423:5432
-
     networks:
       dtf:
         aliases:
           - postgress
-
-  
 
 networks:
   caddy:

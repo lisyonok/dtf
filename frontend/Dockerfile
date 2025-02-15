@@ -2,6 +2,11 @@
 FROM node:20-alpine3.18 as builder
 WORKDIR /app
 
+ARG REACT_APP_API_URL
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
+ARG GENERATE_SOURCEMAP
+ENV GENERATE_SOURCEMAP=$GENERATE_SOURCEMAP
+
 COPY package.json .
 COPY yarn.lock .
 
@@ -25,7 +30,6 @@ EXPOSE 80
 
 # Copy .env file and shell script to container
 WORKDIR /usr/share/nginx/html
-
 
 # Start Nginx server
 CMD ["nginx", "-g", "daemon off;"]

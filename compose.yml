@@ -1,16 +1,17 @@
 services:
   front:
     container_name: 'dtf_frontend'
-    build: ./frontend
-    env_file: .env
+    build:
+      context: ./frontend
+      args:
+        REACT_APP_API_URL: ${REACT_APP_API_URL}
+        GENERATE_SOURCEMAP: false
     labels:
       caddy.reverse_proxy: '{{upstreams 80}}'
       caddy: 'dtf.thatsamefox.ru'
     networks:
       - caddy
     environment:
-      GENERATE_SOURCEMAP: false
-      REACT_APP_API_URL: ${REACT_APP_API_URL}
 
   back:
     container_name: 'dtf_backend'

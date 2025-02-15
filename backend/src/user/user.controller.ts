@@ -1,7 +1,7 @@
 import { Controller, Get, Post, Res, Req, Body } from "@nestjs/common"
 import type { Response, Request } from "express"
 
-import { UserService, LoginCredentals } from "./user.service"
+import { UserService, LoginCredentials } from "./user.service"
 
 @Controller("api/user")
 export class UserController {
@@ -15,7 +15,7 @@ export class UserController {
   }
 
   @Post("/login")
-  async login(@Res({ passthrough: true }) response: Response, @Body() body: LoginCredentals) {
+  async login(@Res({ passthrough: true }) response: Response, @Body() body: LoginCredentials) {
     const { ok, message, token } = await this.userService.login(body)
     if (token) response.cookie("token", token, { httpOnly: true, secure: true, maxAge: 3_600_000 * 24 * 7 })
     if (!ok) response.status(403)

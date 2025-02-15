@@ -41,6 +41,8 @@ services:
           memory: 1G
     volumes:
       - /home/nick/dtf/db:/var/lib/postgresql/data
+    ports:
+      - 32423:5432
 
     networks:
       dtf:

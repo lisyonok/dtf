@@ -21,6 +21,7 @@ RUN yarn build
 
 # Make start script executable
 RUN chmod +x start.sh
+RUN chmod +x scripts/manage_drawings.sh
 
 # Start the server using the production build
 CMD [ "./start.sh" ]

@@ -31,7 +31,6 @@ function Drawing() {
       <div className={css.attribution}>
         <div className={css.name}>{data.username}</div>
         <div className={css.date}>at {new Date(data.createdAt).toLocaleString()}</div>
-        <div className={css.date}>{data.isSignVerified ? "Ричунок проверен ЭЦП" : "Проверка ЭЦП не прошла"}</div>
         <Button to={"/"}>Рисовать</Button>
         <Button to={"/drawings"}>Смотреть другие</Button>
       </div>

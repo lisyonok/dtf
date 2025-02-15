@@ -1,11 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, NotFoundException, UnauthorizedException, BadRequestException } from "@nestjs/common"
 import prisma from "src/lib/db"
 import * as fs from "fs/promises"
 import { nanoid } from "nanoid"
 import * as path from "path"
 import { pathToFullSize } from "src/files"
-import { defParams, hashImage, signHash, verifySignature } from "src/lib/signs"
 
 @Injectable()
 export class DrawingService {
@@ -22,15 +20,10 @@ export class DrawingService {
     const data = drawing.replace(/^data:image\/png;base64,/, "")
     await fs.writeFile(pathToFile, data, "base64")
 
-    const imageHash = hashImage(Buffer.from(data))
-    //@ts-expect-error ????
-    const signature = JSON.stringify(signHash(imageHash, Number(session.User.privateKey), ...defParams))
-
     const drawingRecord = await prisma.drawing.create({
       data: {
         pathToFullSize: "/upload/drawings/" + filename,
-        userId: session.User.id,
-        signature
+        userId: session.User.id
       }
     })
 
@@ -45,7 +38,7 @@ export class DrawingService {
     const drawing = await prisma.drawing.findFirst({
       where: { id },
       include: {
-        User: { select: { username: true, publicKey: true, privateKey: true } }
+        User: { select: { username: true } }
       }
     })
 
@@ -54,23 +47,10 @@ export class DrawingService {
     const {
       pathToFullSize: imgUrl,
       User: { username },
-      createdAt,
-      signature
+      createdAt
     } = drawing
 
-    const imagePath = path.join(pathToFullSize, imgUrl.replace("/upload/drawings/", ""))
-    const image = await fs.readFile(imagePath, "base64")
-    const imageHash = hashImage(Buffer.from(image))
-
-    const isSignVerified = verifySignature(
-      imageHash,
-      JSON.parse(signature),
-      JSON.parse(drawing.User.publicKey),
-      //@ts-expect-error ????
-      ...defParams
-    )
-
-    return { ok: true, path: imgUrl, createdAt, username, signature, isSignVerified }
+    return { ok: true, path: imgUrl, createdAt, username }
   }
 
   async getDrawings() {

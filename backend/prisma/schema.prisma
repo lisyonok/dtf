@@ -17,9 +17,6 @@ model User {
   password  String
   points    Int       @default(0)
 
-  privateKey String
-  publicKey  String
-
   sessions Session[]
   drawings Drawing[]
 }
@@ -37,7 +34,6 @@ model Drawing {
   id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   createdAt DateTime? @default(now())
 
-  signature String
 
   pathToFullSize  String?
   pathToThumbnail String?

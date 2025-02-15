@@ -19,5 +19,8 @@ COPY . .
 RUN npx prisma generate
 RUN yarn build
 
+# Make start script executable
+RUN chmod +x start.sh
+
 # Start the server using the production build
-CMD [ "node", "dist/main.js" ]
+CMD [ "./start.sh" ]

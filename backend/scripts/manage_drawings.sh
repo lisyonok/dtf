@@ -5,7 +5,7 @@ delete_all_drawings() {
     # Удаляем файлы из upload директории
     rm -rf /usr/src/app/upload/*
     # Удаляем записи из базы данных
-    npx prisma db execute --stdin < echo "DELETE FROM \"Drawing\";"
+    echo "DELETE FROM \"Drawing\";" | npx prisma db execute --stdin
     echo "Все рисунки успешно удалены"
 }
 
@@ -14,7 +14,7 @@ delete_drawing_by_hash() {
     echo "Удаление рисунка с хэшем: $hash"
     
     # Получаем пути к файлам из базы данных
-    paths=$(npx prisma db execute --stdin < echo "SELECT \"pathToFullSize\", \"pathToThumbnail\" FROM \"Drawing\" WHERE id = '$hash';")
+    paths=$(echo "SELECT \"pathToFullSize\", \"pathToThumbnail\" FROM \"Drawing\" WHERE id = '$hash';" | npx prisma db execute --stdin)
     
     if [ -n "$paths" ]; then
         # Используем echo и cut вместо while read для sh
@@ -26,7 +26,7 @@ delete_drawing_by_hash() {
         [ -f "/usr/src/app/upload/$thumbnail" ] && rm "/usr/src/app/upload/$thumbnail"
         
         # Удаляем запись из базы данных
-        npx prisma db execute --stdin < echo "DELETE FROM \"Drawing\" WHERE id = '$hash';"
+        echo "DELETE FROM \"Drawing\" WHERE id = '$hash';" | npx prisma db execute --stdin
         echo "Рисунок успешно удален"
     else
         echo "Рисунок с указанным хэшем не найден"

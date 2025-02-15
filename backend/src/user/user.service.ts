@@ -9,7 +9,7 @@ export class UserService {
 
     const session = await prisma.session.findFirst({
       where: { token },
-      include: { User: true }
+      include: { User: { select: { id: true, username: true, createdAt: true } } }
     })
 
     return session

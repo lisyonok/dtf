@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common"
 import prisma from "src/lib/db"
 import { randomBytes } from "node:crypto"
-import argon2 from "argon2"
+import * as argon2 from "argon2"
 @Injectable()
 export class UserService {
   async getSession(token: string) {
